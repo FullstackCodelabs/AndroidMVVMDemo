@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AndroidMVVMDemo</string>
     <string name="view_posts_button_text">View posts</string>
+    <string name="retry_button_text">Retry</string>
 </resources>

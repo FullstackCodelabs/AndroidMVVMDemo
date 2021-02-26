@@ -10,7 +10,7 @@ import com.fullstackcodelabs.androidmvvmdemo.models.Post
 
 
 class PostsScreenAdapter : RecyclerView.Adapter<PostsScreenAdapter.PostViewHolder>() {
-    private var posts: ArrayList<Post>? = null
+    private var posts = mutableListOf<Post>()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): PostViewHolder {
         val postsScreenPostItemBinding: PostsScreenPostItemBinding = DataBindingUtil.inflate(
@@ -21,16 +21,11 @@ class PostsScreenAdapter : RecyclerView.Adapter<PostsScreenAdapter.PostViewHolde
     }
 
     override fun onBindViewHolder(postViewHolder: PostViewHolder, i: Int) {
-        val currentPost: Post = posts!![i]
-        postViewHolder.postsScreenPostItemBinding.post = currentPost
+        postViewHolder.postsScreenPostItemBinding.post = posts[i]
     }
 
     override fun getItemCount(): Int {
-        return if (posts != null) {
-            posts!!.size
-        } else {
-            0
-        }
+        return posts.size
     }
 
     fun setPosts(posts: ArrayList<Post>) {

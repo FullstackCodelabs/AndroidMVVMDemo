@@ -1,38 +1,34 @@
 package com.fullstackcodelabs.androidmvvmdemo.posts_screen
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.fullstackcodelabs.androidmvvmdemo.models.Post
 import com.fullstackcodelabs.androidmvvmdemo.network.RetrofitClient
+import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PostsScreenRepository() {
-    val apiResponse = MutableLiveData(PostsScreenApiResponse())
+class PostsScreenRepository {
+    val apiResponse = PostsScreenApiResponse()
 
-    fun getMutableLiveData(): MutableLiveData<PostsScreenApiResponse> {
+    fun fetchPosts() {
+        apiResponse.status.postValue("loading")
+
         val call = RetrofitClient.getService().posts()
-
-        apiResponse.postValue(PostsScreenApiResponse())
         call.enqueue(object : Callback<List<Post>> {
-            override fun onResponse(
-                call: retrofit2.Call<List<Post>>,
-                response: Response<List<Post>>
-            ) {
-                if (response.isSuccessful) {
-                    apiResponse.postValue(PostsScreenApiResponse(response.body()))
-                } else {
-                    apiResponse.postValue(PostsScreenApiResponse(Error("Failed to load posts.")))
+            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    apiResponse.loadingSucceeded(response.body() as ArrayList<Post>)
+                    return
                 }
+
+                apiResponse.loadingFailed()
             }
 
-            override fun onFailure(call: retrofit2.Call<List<Post>>, t: Throwable) {
+            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
                 Log.d(TAG, "Failed to load posts ${t.message}")
-                apiResponse.postValue(PostsScreenApiResponse(t))
+                apiResponse.loadingFailed()
             }
         })
-
-        return apiResponse
     }
 
     companion object {

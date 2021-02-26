@@ -22,23 +22,24 @@
             android:id="@+id/rvPosts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{vm.postsScreenApiResponse.status == `loaded` ? View.VISIBLE : View.GONE }" />
+            android:visibility="@{vm.status == `loaded` ? View.VISIBLE : View.GONE }" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="@{vm.postsScreenApiResponse.status == `failed` ? View.VISIBLE : View.GONE }"
+            android:visibility="@{vm.status == `failed` ? View.VISIBLE : View.GONE }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvFailedErrorMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Failed to load posts. Please try again." />
+                tools:text="Failed to load posts. Please try again." />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
@@ -46,7 +47,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:onClick="retryButtonClicked"
-                android:text="Retry">
+                android:text="@string/retry_button_text">
 
             </com.google.android.material.button.MaterialButton>
 
@@ -55,7 +56,7 @@
         <ProgressBar
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:visibility="@{vm.postsScreenApiResponse.status == `loading` ? View.VISIBLE : View.GONE }"
+            android:visibility="@{vm.status == `loading` ? View.VISIBLE : View.GONE }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

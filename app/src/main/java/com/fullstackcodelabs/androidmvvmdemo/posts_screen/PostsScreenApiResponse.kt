@@ -1,27 +1,20 @@
 package com.fullstackcodelabs.androidmvvmdemo.posts_screen
 
+import androidx.lifecycle.MutableLiveData
 import com.fullstackcodelabs.androidmvvmdemo.models.Post
 
 class PostsScreenApiResponse {
-    var status: String = "loading"
-    var posts: List<Post>?
-    var error: Throwable?
+    var status = MutableLiveData("loading")
+    var posts = mutableListOf<Post>()
+    var errorMessage: String? = null
 
-    constructor() {
-        this.status = "loading"
-        this.posts = null
-        error = null
-    }
-
-    constructor(posts: List<Post>?) {
-        this.status = "loaded"
+    fun loadingSucceeded(posts: ArrayList<Post>) {
+        this.status.postValue("loaded")
         this.posts = posts
-        error = null
     }
 
-    constructor(error: Throwable?) {
-        this.status = "failed"
-        this.error = error
-        posts = null
+    fun loadingFailed() {
+        this.status.postValue("failed")
+        this.errorMessage = "Failed to load posts. Please try again later."
     }
 }
