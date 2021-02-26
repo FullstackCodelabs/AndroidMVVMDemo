@@ -3,7 +3,6 @@ package com.fullstackcodelabs.androidmvvmdemo.posts_screen
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -28,6 +27,7 @@ class PostsScreenActivity : AppCompatActivity() {
 
         // Set data variable for viewmodel
         binding.vm = postsScreenViewModel
+        binding.lifecycleOwner = this
 
         // Setup recyclerview
         binding.rvPosts.layoutManager = LinearLayoutManager(this)
@@ -37,28 +37,21 @@ class PostsScreenActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
-        postsScreenViewModel.loadPosts().observe(this, object : Observer<PostsScreenApiResponse?> {
-            override fun onChanged(postsScreenApiResponse: PostsScreenApiResponse?) {
-                if (postsScreenApiResponse == null) {
-                    // handle error here
-                    return
+        postsScreenViewModel.loadPosts()
+        postsScreenViewModel.postsScreenApiResponse.observe(
+            this,
+            object : Observer<PostsScreenApiResponse?> {
+                override fun onChanged(postsScreenApiResponse: PostsScreenApiResponse?) {
+                    if (postsScreenApiResponse == null) {
+                        return
+                    } else if (postsScreenApiResponse.status == "loaded") {
+                        postsScreenAdapter.setPosts(postsScreenApiResponse.posts as ArrayList<Post>)
+                    } else if (postsScreenApiResponse.status == "failed") {
+                        val e: Throwable = postsScreenApiResponse.error!!
+                        Log.e("TAG", "Error is " + e.localizedMessage)
+                    }
                 }
-                if (postsScreenApiResponse.error == null) {
-                    postsScreenViewModel.status.set("loaded")
-                    postsScreenAdapter.setPosts(postsScreenApiResponse.posts as ArrayList<Post>)
-                } else {
-                    // call failed.
-                    val e: Throwable = postsScreenApiResponse.error!!
-                    Toast.makeText(
-                        this@PostsScreenActivity,
-                        "Error is " + e.message,
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                    Log.e("TAG", "Error is " + e.localizedMessage)
-                }
-            }
-        })
+            })
     }
 
     fun retryButtonClicked(view: View) {

@@ -22,13 +22,13 @@
             android:id="@+id/rvPosts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{vm.status == `loaded` ? View.VISIBLE : View.GONE }" />
+            android:visibility="@{vm.postsScreenApiResponse.status == `loaded` ? View.VISIBLE : View.GONE }" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="@{vm.status == `failed` ? View.VISIBLE : View.GONE }"
+            android:visibility="@{vm.postsScreenApiResponse.status == `failed` ? View.VISIBLE : View.GONE }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
         <ProgressBar
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:visibility="@{vm.status == `loading` ? View.VISIBLE : View.GONE }"
+            android:visibility="@{vm.postsScreenApiResponse.status == `loading` ? View.VISIBLE : View.GONE }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

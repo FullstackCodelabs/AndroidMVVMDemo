@@ -7,12 +7,13 @@ import com.fullstackcodelabs.androidmvvmdemo.network.RetrofitClient
 import retrofit2.Callback
 import retrofit2.Response
 
-class PostsScreenRepository {
-    val apiResponse = MutableLiveData<PostsScreenApiResponse>()
+class PostsScreenRepository() {
+    val apiResponse = MutableLiveData(PostsScreenApiResponse())
 
     fun getMutableLiveData(): MutableLiveData<PostsScreenApiResponse> {
         val call = RetrofitClient.getService().posts()
 
+        apiResponse.postValue(PostsScreenApiResponse())
         call.enqueue(object : Callback<List<Post>> {
             override fun onResponse(
                 call: retrofit2.Call<List<Post>>,
