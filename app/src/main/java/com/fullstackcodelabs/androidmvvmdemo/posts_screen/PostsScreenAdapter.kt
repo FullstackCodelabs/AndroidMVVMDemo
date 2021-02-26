@@ -35,6 +35,7 @@ class PostsScreenAdapter : RecyclerView.Adapter<PostsScreenAdapter.PostViewHolde
 
     fun setPosts(posts: ArrayList<Post>) {
         this.posts = posts
+        notifyDataSetChanged()
     }
 
     inner class PostViewHolder(var postsScreenPostItemBinding: PostsScreenPostItemBinding) :

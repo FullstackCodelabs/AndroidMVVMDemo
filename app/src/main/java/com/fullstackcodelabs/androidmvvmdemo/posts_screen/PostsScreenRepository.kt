@@ -8,9 +8,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PostsScreenRepository {
-    private val mutableLiveData = MutableLiveData<List<Post>>()
+    val apiResponse = MutableLiveData<PostsScreenApiResponse>()
 
-    fun getMutableLiveData(): MutableLiveData<List<Post>> {
+    fun getMutableLiveData(): MutableLiveData<PostsScreenApiResponse> {
         val call = RetrofitClient.getService().posts()
 
         call.enqueue(object : Callback<List<Post>> {
@@ -18,17 +18,20 @@ class PostsScreenRepository {
                 call: retrofit2.Call<List<Post>>,
                 response: Response<List<Post>>
             ) {
-                response.body()?.let {
-                    mutableLiveData.value = it
+                if (response.isSuccessful) {
+                    apiResponse.postValue(PostsScreenApiResponse(response.body()))
+                } else {
+                    apiResponse.postValue(PostsScreenApiResponse(Error("Failed to load posts.")))
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<List<Post>>, t: Throwable) {
                 Log.d(TAG, "Failed to load posts ${t.message}")
+                apiResponse.postValue(PostsScreenApiResponse(t))
             }
         })
 
-        return mutableLiveData
+        return apiResponse
     }
 
     companion object {
