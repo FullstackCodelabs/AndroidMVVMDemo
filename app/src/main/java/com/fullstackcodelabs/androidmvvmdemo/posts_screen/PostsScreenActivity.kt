@@ -19,26 +19,27 @@ class PostsScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.posts_screen_activity)
+        postsScreenViewModel = ViewModelProvider(this).get(PostsScreenViewModel::class.java)
+        setupBinding()
+        setObservers()
+        postsScreenViewModel.fetchPosts()
+    }
+
+    private fun setupBinding() {
         binding.lifecycleOwner = this
 
         // Setup ViewModel
-        postsScreenViewModel = ViewModelProvider(this).get(PostsScreenViewModel::class.java)
         binding.vm = postsScreenViewModel
 
         // Setup recyclerview
         binding.rvPosts.layoutManager = LinearLayoutManager(this)
         binding.rvPosts.adapter = postsScreenAdapter
-
-        setObservers()
-        postsScreenViewModel.fetchPosts()
     }
 
     private fun setObservers() {
         postsScreenViewModel.status.observe(this, { status ->
             if (status == "loaded") {
                 postsScreenAdapter.setPosts(postsScreenViewModel.posts as ArrayList<Post>)
-            } else if (status == "failed") {
-                binding.tvFailedErrorMessage.text = postsScreenViewModel.errorMessage
             }
         })
     }

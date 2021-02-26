@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                tools:text="Failed to load posts. Please try again." />
+                tools:text="@{vm.errorMessage}" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"

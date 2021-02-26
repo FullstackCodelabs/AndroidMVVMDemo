@@ -16,7 +16,7 @@ class PostsScreenViewModel(application: Application) : AndroidViewModel(applicat
     val posts: List<Post>
         get() = postsScreenApiResponse.posts
 
-    val errorMessage: String?
+    val errorMessage: MutableLiveData<String>
         get() = postsScreenApiResponse.errorMessage
 
     fun fetchPosts() {

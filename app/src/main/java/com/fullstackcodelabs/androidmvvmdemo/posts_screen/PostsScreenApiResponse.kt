@@ -6,7 +6,7 @@ import com.fullstackcodelabs.androidmvvmdemo.models.Post
 class PostsScreenApiResponse {
     var status = MutableLiveData("loading")
     var posts = mutableListOf<Post>()
-    var errorMessage: String? = null
+    var errorMessage: MutableLiveData<String> = MutableLiveData(null)
 
     fun loadingSucceeded(posts: ArrayList<Post>) {
         this.status.postValue("loaded")
@@ -15,6 +15,6 @@ class PostsScreenApiResponse {
 
     fun loadingFailed() {
         this.status.postValue("failed")
-        this.errorMessage = "Failed to load posts. Please try again later."
+        this.errorMessage.postValue("Failed to load posts. Please try again.")
     }
 }
